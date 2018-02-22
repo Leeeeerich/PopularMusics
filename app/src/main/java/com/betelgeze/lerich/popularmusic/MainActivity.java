@@ -21,10 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private Realm realm;
 
     private EjectSongsFromBase ejectSongsFromBase = new EjectSongsFromBase();
-    private Presenter presenter = new Presenter();
-
-    public List popularSongs = new ArrayList();
-    public List radioList = new ArrayList();
+    private Presenter presenter = new Presenter("");
 
     protected RealmConfiguration realmConfig;
 
@@ -42,24 +39,6 @@ public class MainActivity extends AppCompatActivity {
         Realm.setDefaultConfiguration(realmConfig);Realm.init(this);
 
       //  deleteTables();
-       // updateSongsList();
-       // updateRadioList();
-
-
-        ObjectTrackSend objectTrackSend = new ObjectTrackSend();
-        ObjectRadioSend objectRadioSend = new ObjectRadioSend();
-/*
-        getPopularSongs();
-        objectTrackSend.sendObjectTrack(popularSongs);
-        */
-        getRadioList();
-        objectRadioSend.sendObjectRadio(radioList);
-
-      //      Log.e("RxJavaX", "Данные обновлены" + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class).get(0).getTrackName());
-
-
-
-
 
 
         Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
@@ -69,50 +48,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Обновление списка песен
-     * @return true = идёт процесс обновления
-     */
-
-    public boolean updateSongsList() {
-        presenter.updateSongsList();
-        return presenter.progressUpdateList;
-    }
-
-    /**
-     * Оновление списка Радио станций
-     * @return true = идёт процесс обновления
-     */
-
-    public boolean updateRadioList() {
-        presenter.updateRadioList();
-        return presenter.progressUpdateList;
-    }
-
-    /**
-     * Возвращает список радиостанций
-     * @return List
-     */
-
-    public List getRadioList() {
-        radioList = ejectSongsFromBase.ejectSongsFromBase(ObjectRadio.class);
-        return radioList;
-    }
-
-    /**
-     * Возвращает список песен
-     * @return List
-     */
-
-    public List getPopularSongs() {
-        popularSongs = ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class);
-        return popularSongs;
-    }
-
-    /**
      * Получить обьект Realm
      * @return
      */
-
     public Realm getRealm() {
         return realm;
     }
@@ -120,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Удаляет таблицы из БД
      */
-
     public void deleteTables(){
         Realm.deleteRealm(realmConfig); // Удаление таблиц
     }
@@ -129,6 +66,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-     //  realm.close();
+       realm.close();
     }
 }

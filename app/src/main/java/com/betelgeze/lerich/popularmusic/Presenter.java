@@ -17,6 +17,9 @@ import io.reactivex.schedulers.Schedulers;
 public class Presenter {
 
     private List<ObjectTrack> listSongsNames = new ArrayList<>();
+    private List popularSongs = new ArrayList();
+    private List radioList = new ArrayList();
+
     private boolean updateSongsNamesBase = false;
     private EjectSongsFromBase ejectSongsFromBase = new EjectSongsFromBase();
     private InsertToBase insertToBase = new InsertToBase();
@@ -24,11 +27,20 @@ public class Presenter {
     private ParserPageZFFM parserPageZFFM = new ParserPageZFFM();
     private ParserRadioList parserRadioList = new ParserRadioList();
     private ObjectTrackSend objectTrackSend = new ObjectTrackSend();
+    private ObjectRadioSend objectRadioSend = new ObjectRadioSend();
     private int numNamesSong = 1;
     private int sizeOfList;
     public boolean progressUpdateList = false;
 
     public Presenter() {}
+
+    public Presenter(String s) {/*
+        updateSongsList();
+        sendTrackList(getPopularSongs());
+        updateRadioList();
+        sendRadioList(getRadioList());*/
+    }
+
     /**
      * Обновление списка популярных треков
      * @return - Возвращает прогресс
@@ -150,6 +162,16 @@ public class Presenter {
     }
 
     /**
+     * Возвращает список песен
+     * @return List
+     */
+
+    public List getPopularSongs() {
+        popularSongs = ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class);
+        return popularSongs;
+    }
+
+    /**
      * Обновление списка популярных радиостанций
      * @return - Возвращает прогресс выполнения
      */
@@ -195,11 +217,29 @@ public class Presenter {
     }
 
     /**
+     * Возвращает список радиостанций
+     * @return List
+     */
+
+    public List getRadioList() {
+        radioList = ejectSongsFromBase.ejectSongsFromBase(ObjectRadio.class);
+        return radioList;
+    }
+
+    /**
      * Отправить на сервер список популярных треков
      * @param popularSongs - список отправляемых треков
      */
     public void sendTrackList(List popularSongs){
         objectTrackSend.sendObjectTrack(popularSongs);
+    }
+
+    /**
+     * Отправить на сервер список радиостанций
+     * @param radioList - список отправляемых радиостанций
+     */
+    public void sendRadioList(List radioList){
+        objectRadioSend.sendObjectRadio(radioList);
     }
 
 }
