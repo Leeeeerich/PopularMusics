@@ -1,5 +1,6 @@
 package com.betelgeze.lerich.popularmusic;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class Presenter {
 
@@ -34,11 +37,17 @@ public class Presenter {
 
     public Presenter() {}
 
-    public Presenter(String s) {/*
+    public Presenter(String s) {
+
+
         updateSongsList();
+
         sendTrackList(getPopularSongs());
-        updateRadioList();
-        sendRadioList(getRadioList());*/
+
+
+        Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
+     //   updateRadioList();
+       // sendRadioList(getRadioList());
     }
 
     /**
@@ -108,6 +117,7 @@ public class Presenter {
 
                 sizeOfList = ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).size();
                 Log.e("RxJavaX", "onComplete: All Done!" + ejectSongsFromBase.ejectSongsFromBase(PopSongs.class));
+
             }
         };
 //Create our subscription//
@@ -220,7 +230,6 @@ public class Presenter {
      * Возвращает список радиостанций
      * @return List
      */
-
     public List getRadioList() {
         radioList = ejectSongsFromBase.ejectSongsFromBase(ObjectRadio.class);
         return radioList;
@@ -241,5 +250,6 @@ public class Presenter {
     public void sendRadioList(List radioList){
         objectRadioSend.sendObjectRadio(radioList);
     }
+
 
 }

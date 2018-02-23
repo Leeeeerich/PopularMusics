@@ -18,10 +18,10 @@ import io.realm.RealmObject;
 public class MainActivity extends AppCompatActivity {
 
 
-    private Realm realm;
+  //  private Realm realm;
 
     private EjectSongsFromBase ejectSongsFromBase = new EjectSongsFromBase();
-    private Presenter presenter = new Presenter("");
+
 
     protected RealmConfiguration realmConfig;
 
@@ -38,10 +38,12 @@ public class MainActivity extends AppCompatActivity {
 
         Realm.setDefaultConfiguration(realmConfig);Realm.init(this);
 
+
+        Presenter presenter = new Presenter("");
       //  deleteTables();
 
 
-        Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
+     //   Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
      //   Log.d("Pony", "" + presenter.getTrackList());
 
 
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Получить обьект Realm
      * @return
-     */
+     *//*
     public Realm getRealm() {
         return realm;
     }
@@ -66,6 +68,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-       realm.close();
+     //   realm.close();
     }
 }
