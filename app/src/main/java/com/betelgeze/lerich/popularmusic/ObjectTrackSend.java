@@ -60,7 +60,8 @@ public class ObjectTrackSend {
 
     public void parseArray(List<ObjectTrack> list){
         for(int i = 0; i < list.size(); i++) {
-            tracks.add(new ObjectTrack(list.get(i).getTrackName(),
+            tracks.add(new ObjectTrack(
+                    list.get(i).getTrackName(),
                     list.get(i).getTrackArtist(),
                     list.get(i).getTrackTime(),
                     list.get(i).getTrackURL()));

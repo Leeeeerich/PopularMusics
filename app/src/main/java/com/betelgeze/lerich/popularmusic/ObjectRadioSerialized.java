@@ -13,21 +13,21 @@ public class ObjectRadioSerialized {
 
     @SerializedName("Radio")
     @Expose
-    private List<ObjectRadio> Radio = null;
+    private List<ObjectRadio> radio = null;
 
-    ObjectRadioSerialized(List<ObjectRadio> Radio){
+    ObjectRadioSerialized(List<ObjectRadio> radio){
 
-        this.Radio = Radio;
+        this.radio = radio;
 
     }
 
 
     public List<ObjectRadio> getRadios() {
-        return Radio;
+        return radio;
     }
 
-    public void setRadios(List<ObjectRadio> Radio) {
-        this.Radio = Radio;
+    public void setRadios(List<ObjectRadio> radio) {
+        this.radio = radio;
     }
 
 }

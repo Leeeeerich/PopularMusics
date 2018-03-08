@@ -20,11 +20,11 @@ public class EjectSongsFromBase {
         return  result;
     }
 
-    public List<ObjectTrack> ejectSongsFromBase(Class class_name){
+    public List ejectSongsFromBase(Class class_name){
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<ObjectTrack> result = realm.where(class_name)
+        RealmResults result = realm.where(class_name)
 
                 .findAll();
 

@@ -1,5 +1,7 @@
 package com.betelgeze.lerich.popularmusic;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class ObjectRadioSend {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(ObjectTrackAPI.BASE_URL)
+                .baseUrl(ObjectRadioAPI.BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -53,16 +55,17 @@ public class ObjectRadioSend {
             }
         });
 
-      //  return rootView;
     }
 
     public void parseArray(List<ObjectRadio> list){
         for(int i = 0; i < list.size(); i++) {
-            radios.add(new ObjectTrack(list.get(i).getRadioName(),
+            radios.add(new ObjectRadio(
+                    list.get(i).getRadioName(),
                     list.get(i).getRadioCity(),
                     list.get(i).getImgURL(),
                     list.get(i).getRadioURL()));
         }
+    //    Log.e("Soryan ", "" + radios.get(5));
     }
 
 }

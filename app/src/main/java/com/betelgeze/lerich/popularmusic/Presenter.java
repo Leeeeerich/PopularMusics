@@ -40,14 +40,14 @@ public class Presenter {
     public Presenter(String s) {
 
 
-        updateSongsList();
+      //  updateSongsList();
 
-        sendTrackList(getPopularSongs());
+     //   sendTrackList(getPopularSongs());
 
 
-        Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
-     //   updateRadioList();
-       // sendRadioList(getRadioList());
+    //    Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
+    //    updateRadioList();
+        sendRadioList(getRadioList());
     }
 
     /**
@@ -232,6 +232,7 @@ public class Presenter {
      */
     public List getRadioList() {
         radioList = ejectSongsFromBase.ejectSongsFromBase(ObjectRadio.class);
+        Log.e("Soryan1 ", "" + radioList.get(5));
         return radioList;
     }
 
