@@ -1,6 +1,5 @@
 package com.betelgeze.lerich.popularmusic;
 
-import android.net.Uri;
 import android.util.Log;
 
 import org.jsoup.nodes.Document;
@@ -22,14 +21,14 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Класс который возвращает список
- * названий треков
+ * названий новинок треков
  */
-public class ParserPopularTracks extends Constants {
+public class ParserNoveltyTracks extends Constants {
 
     private Document documentPage;
     private Elements elements;
     public String keywords = "";
-    public String url = "http://www.europaplus.ru/index.php?go=Chart40";
+    public String url = "http://nrj.ua/programs/novelties";
     public String userAgent = null;
     public PopSongs popSongs;
 
@@ -40,7 +39,7 @@ public class ParserPopularTracks extends Constants {
     public int numberOfItems = 0;
 
 
-    public ParserPopularTracks() {
+    public ParserNoveltyTracks() {
 
     }
 
@@ -82,26 +81,27 @@ public class ParserPopularTracks extends Constants {
     private List trackList(Document documentPage) {
         try {
 
-            Elements searchContainer = documentPage.select("div [class=\"songs-list players-list\"]");
+            Elements searchContainer = documentPage.select("div [class=\"box-hold\"]");
           //  player-in-playlist-holder
          //   Elements elementsNumberOfItems = documentPage.select("b.grey");
         //    numberOfItems = Integer.parseInt(elementsNumberOfItems.text());
         //    Log.e("RxJavaX", "numberOfItems = " + numberOfItems);
             Log.d("ParserPageZFFM", "2.1 " + searchContainer);
 
-            Elements itemTrackElements = searchContainer.select("div [class=\"jp-title jp-title-short\"]");
+            Elements itemTrackElements = searchContainer.select("div [class=\"player-in-playlist-holder\"]");
             Log.d("ParserPageZFFM", "2.2 " + itemTrackElements);
 
-            int numItemTrackElements = searchContainer.select("div [class=\"jp-title jp-title-short\"]").size();
+            int numItemTrackElements = searchContainer.select("div [class=\"player-in-playlist-holder\"]").size();
             Log.d("ParserPageZFFM", "num = " + numItemTrackElements);
 
             for (int i = 0; i < numItemTrackElements; i++) {
                 Log.d("ParserPageZFFM", "i = " + i);
+
                 //Блок в котором находятся блоки с названием трека и именем исполнителя
-                Element trackFullName = searchContainer.select("div [class=\"jp-title jp-title-short\"]").get(i);
+                Element trackFullName = searchContainer.select("div [class=\"jp-title\"]").get(i);
 
                 //Блок названия трека
-                Element trackName = trackFullName.select("div [class=\"title\"]").first();
+                Element trackName = trackFullName.select("div [class=\"ajax\"]").first();
 
                 //Блок имени исполнителя
                 Element trackArtistName = trackFullName.select("span").first();

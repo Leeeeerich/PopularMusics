@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Presenter presenter = new Presenter("");
-      //  deleteTables();
+     //   deleteTables();
 
 
      //   Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));

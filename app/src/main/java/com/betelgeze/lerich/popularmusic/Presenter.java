@@ -6,12 +6,19 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Predicate;
+import io.reactivex.internal.operators.observable.ObservableFromIterable;
+import io.reactivex.internal.operators.observable.ObservableSkipWhile;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
@@ -27,6 +34,7 @@ public class Presenter {
     private EjectSongsFromBase ejectSongsFromBase = new EjectSongsFromBase();
     private InsertToBase insertToBase = new InsertToBase();
     private ParserPopularTracks parserPopularTracks = new ParserPopularTracks();
+    private ParserNoveltyTracks parserNoveltyTracks = new ParserNoveltyTracks();
     private ParserPageZFFM parserPageZFFM = new ParserPageZFFM();
     private ParserRadioList parserRadioList = new ParserRadioList();
     private ObjectTrackSend objectTrackSend = new ObjectTrackSend();
@@ -37,17 +45,26 @@ public class Presenter {
 
     public Presenter() {}
 
-    public Presenter(String s) {
+    public Presenter(String s) {/*
+        DownloadPage downloadPage = new DownloadPage();
+
+        Observable.just(
+                downloadPage
+                        .getPage("http://nrj.ua/programs/novelties", ""))
+                .subscribeOn(Schedulers.io())
+             //   .observeOn()
+
+                ;*/
 
 
-      //  updateSongsList();
+     //   updateSongsList();
 
      //   sendTrackList(getPopularSongs());
 
 
     //    Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
     //    updateRadioList();
-        sendRadioList(getRadioList());
+    //    sendRadioList(getRadioList());
     }
 
     /**
@@ -125,6 +142,68 @@ public class Presenter {
     }
 
     /**
+     * Получение списка новинок треков
+     *
+     * onComplete - Вызывает listSong и
+     *              передаёт первое название
+     *              песни из списка (keywords)
+     */
+    private void listSongsNovelty (){
+
+        Observer<List<PopSongs>> observer = new Observer<List<PopSongs>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.e("RxJavaX", "onSubscribe: ");
+            }
+
+            @Override
+            public void onNext(List<PopSongs> value) {
+
+                if (ejectSongsFromBase.ejectSongsNamesFromBase(NoveltySongs.class).equals(value)){
+                    Log.e("RxJavaX", "Данные не обновлены");
+                    updateSongsNamesBase = false;
+                } else {
+
+                    insertToBase.insertSongsNamesToBase(value);
+                    String ist = "10", iht = "10";
+
+                    Log.e("RxJavaX", "Данные обновлены" + ejectSongsFromBase.ejectSongsNamesFromBase(NoveltySongs.class).get(0).getTrackName() +
+                            "\n  " + ejectSongsFromBase.ejectSongsNamesFromBase(NoveltySongs.class).size() +
+                            "\n  " + value.size() +
+                            "\n  " + ejectSongsFromBase.ejectSongsNamesFromBase(NoveltySongs.class).hashCode() +
+                            "\n  " + value.hashCode() +
+                            "\n  " + ist.hashCode() +
+                            "\n  " + iht.hashCode());
+
+                    updateSongsNamesBase = true;
+                }
+
+                Log.e("RxJavaX", "onNext: " + value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("RxJavaX", "onError: ");
+            }
+
+            @Override
+            public void onComplete() {
+
+                insertToBase.deleteObjectFromBase(ObjectTrack.class);
+                if(updateSongsNamesBase == true){
+                    listSong(ejectSongsFromBase.ejectSongsNamesFromBase(NoveltySongs.class).get(0).getTrackArtist() + " " + ejectSongsFromBase.ejectSongsNamesFromBase(NoveltySongs.class).get(0).getTrackName());
+                }
+
+                sizeOfList = ejectSongsFromBase.ejectSongsNamesFromBase(NoveltySongs.class).size();
+                Log.e("RxJavaX", "onComplete: All Done!" + ejectSongsFromBase.ejectSongsFromBase(NoveltySongs.class));
+
+            }
+        };
+//Create our subscription//
+        parserNoveltyTracks.getTrackList().subscribe(observer);
+    }
+
+    /**
      * Получение трека по слову (keywords)
      * @param keywords - название трека
      * onComplete - Рекурсия, от количества
@@ -165,6 +244,8 @@ public class Presenter {
 
                 Log.e("RxJavaX", "onComplete: All Done! " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
                 progressUpdateList = false;
+
+
             }
         };
 //Create our subscription//
@@ -240,17 +321,66 @@ public class Presenter {
      * Отправить на сервер список популярных треков
      * @param popularSongs - список отправляемых треков
      */
-    public void sendTrackList(List popularSongs){
+    public boolean sendTrackList(List popularSongs){
         objectTrackSend.sendObjectTrack(popularSongs);
+        return true;
     }
 
     /**
      * Отправить на сервер список радиостанций
      * @param radioList - список отправляемых радиостанций
      */
-    public void sendRadioList(List radioList){
+    public boolean sendRadioList(List radioList){
         objectRadioSend.sendObjectRadio(radioList);
+        return  true;
     }
 
+    private void taskManager (){
+
+        Observer<Boolean> observer = new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.e("RxJavaX", "onSubscribe: ");
+            }
+
+            @Override
+            public void onNext(Boolean value) {
+
+            //    boolean b = value;
+                //onNext(value);
+            //    onNext(updateRadioList());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("RxJavaX", "onError: ");
+            }
+
+            @Override
+            public void onComplete() {
+                sendTrackList(getPopularSongs());
+              //  sendRadioList(getRadioList());
+            }
+        };
+//Create our subscription//
+        taskObservable().subscribe(observer);
+    }
+
+    public Observable taskObservable() {
+
+        final Observable observable =
+                Observable.create(new ObservableOnSubscribe() {
+                                      @Override
+                                      public void subscribe(ObservableEmitter e) throws Exception {
+                                          updateSongsList();
+
+                                        //  e.onNext(updateRadioList());
+                                       //   e.onNext(true);
+                                          e.onComplete();
+                                      }
+                                  }
+                ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        return observable;
+    }
 
 }
