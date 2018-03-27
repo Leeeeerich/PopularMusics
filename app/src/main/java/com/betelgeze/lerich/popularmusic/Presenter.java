@@ -45,24 +45,14 @@ public class Presenter {
 
     public Presenter() {}
 
-    public Presenter(String s) {/*
-        DownloadPage downloadPage = new DownloadPage();
-
-        Observable.just(
-                downloadPage
-                        .getPage("http://nrj.ua/programs/novelties", ""))
-                .subscribeOn(Schedulers.io())
-             //   .observeOn()
-
-                ;*/
+    public Presenter(String s) {
 
 
      //   updateSongsList();
-
      //   sendTrackList(getPopularSongs());
 
-
     //    Log.e("Botter", "C = " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
+
     //    updateRadioList();
     //    sendRadioList(getRadioList());
     }
@@ -91,37 +81,17 @@ public class Presenter {
         Observer<List<PopSongs>> observer = new Observer<List<PopSongs>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e("RxJavaX", "onSubscribe: ");
+
             }
 
             @Override
             public void onNext(List<PopSongs> value) {
 
-                if (ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).equals(value)){
-                    Log.e("RxJavaX", "Данные не обновлены");
-                    updateSongsNamesBase = false;
-                } else {
-
-                    insertToBase.insertSongsNamesToBase(value);
-                    String ist = "10", iht = "10";
-
-                    Log.e("RxJavaX", "Данные обновлены" + ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).get(0).getTrackName() +
-                            "\n  " + ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).size() +
-                            "\n  " + value.size() +
-                            "\n  " + ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).hashCode() +
-                            "\n  " + value.hashCode() +
-                            "\n  " + ist.hashCode() +
-                            "\n  " + iht.hashCode());
-
-                    updateSongsNamesBase = true;
-                }
-
-                Log.e("RxJavaX", "onNext: " + value);
+                insertToBase.insertSongsNamesToBase(value);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("RxJavaX", "onError: ");
             }
 
             @Override
@@ -129,12 +99,19 @@ public class Presenter {
 
                 insertToBase.deleteObjectFromBase(ObjectTrack.class);
                  if(updateSongsNamesBase == true){
-                    listSong(ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).get(0).getTrackArtist() + " " + ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).get(0).getTrackName());
+                    listSong(
+                            ejectSongsFromBase
+                                            .ejectSongsNamesFromBase(PopSongs.class)
+                                            .get(0)
+                                            .getTrackArtist()
+                                    + " " +
+                                    ejectSongsFromBase
+                                            .ejectSongsNamesFromBase(PopSongs.class)
+                                            .get(0)
+                                            .getTrackName());
                  }
 
                 sizeOfList = ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).size();
-                Log.e("RxJavaX", "onComplete: All Done!" + ejectSongsFromBase.ejectSongsFromBase(PopSongs.class));
-
             }
         };
 //Create our subscription//
@@ -211,26 +188,18 @@ public class Presenter {
      */
     private void listSong (String keywords){
 
-        Log.e("RxJavaX", "keywords: " + keywords);
-
-
         Observer<List<ObjectTrack>> observer = new Observer<List<ObjectTrack>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e("RxJavaX", "onSubscribe: ");
             }
 
             @Override
             public void onNext(List value) {
-
                 insertToBase.insertSongsToBase(value);
-
-                Log.e("RxJavaX", "onNext: " + value);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("RxJavaX", "onError: Names");
             }
 
             @Override
@@ -238,11 +207,21 @@ public class Presenter {
 
                 if(numNamesSong < sizeOfList){
 
-                    listSong(ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).get(numNamesSong).getTrackArtist() + " " + ejectSongsFromBase.ejectSongsNamesFromBase(PopSongs.class).get(numNamesSong).getTrackName());
+                    listSong(
+                            ejectSongsFromBase
+                                            .ejectSongsNamesFromBase(PopSongs.class)
+                                            .get(numNamesSong)
+                                            .getTrackArtist()
+                                    + " " +
+                                    ejectSongsFromBase
+                                            .ejectSongsNamesFromBase(PopSongs.class)
+                                            .get(numNamesSong)
+                                            .getTrackName()
+                    );
+
                     numNamesSong++;
                 }
 
-                Log.e("RxJavaX", "onComplete: All Done! " + ejectSongsFromBase.ejectSongsFromBase(ObjectTrack.class));
                 progressUpdateList = false;
 
 
@@ -280,8 +259,6 @@ public class Presenter {
         Observer<List<ObjectRadio>> observer = new Observer<List<ObjectRadio>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e("RxJavaX", "onSubscribe: ");
-            //    d.dispose();
             }
 
             @Override
@@ -298,9 +275,6 @@ public class Presenter {
 
             @Override
             public void onComplete() {
-                progressUpdateList = false;
-                Log.e("RxJavaX", "onComplete: " + ejectSongsFromBase.ejectSongsFromBase(ObjectRadio.class));
-
             }
         };
 //Create our subscription//

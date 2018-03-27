@@ -44,12 +44,9 @@ public class ParserPopularTracks extends Constants {
 
     }
 
-    /*
-     *
+    /**
      * Наблюдатель "Метод" возвращающий массив (список) треков
-     * @param url
-     * @param keywords
-     * @return
+     * @return observable
      */
     public Observable getTrackList() {
 
@@ -83,10 +80,6 @@ public class ParserPopularTracks extends Constants {
         try {
 
             Elements searchContainer = documentPage.select("div [class=\"songs-list players-list\"]");
-          //  player-in-playlist-holder
-         //   Elements elementsNumberOfItems = documentPage.select("b.grey");
-        //    numberOfItems = Integer.parseInt(elementsNumberOfItems.text());
-        //    Log.e("RxJavaX", "numberOfItems = " + numberOfItems);
             Log.d("ParserPageZFFM", "2.1 " + searchContainer);
 
             Elements itemTrackElements = searchContainer.select("div [class=\"jp-title jp-title-short\"]");
@@ -97,6 +90,7 @@ public class ParserPopularTracks extends Constants {
 
             for (int i = 0; i < numItemTrackElements; i++) {
                 Log.d("ParserPageZFFM", "i = " + i);
+
                 //Блок в котором находятся блоки с названием трека и именем исполнителя
                 Element trackFullName = searchContainer.select("div [class=\"jp-title jp-title-short\"]").get(i);
 
@@ -105,22 +99,11 @@ public class ParserPopularTracks extends Constants {
 
                 //Блок имени исполнителя
                 Element trackArtistName = trackFullName.select("span").first();
-/*                Element trackTime = searchContainer.select(TRACK_TIME).get(i);
-                Element itemTrackElement = itemTrackElements.get(i);
-                String trackURL = itemTrackElement.absUrl(TRACK_URL);
-                Log.d("ParserPageZFFM", "4" + trackURL);
-                */
-
-
-
                 Log.d("ParserPageZFFM", "3 = " + trackFullName.text());
+
                 popSongs = new PopSongs(
                         trackName.text(),
                         trackArtistName.text());
-/*
-                Uri uri;
-                uri = Uri.parse(trackURL);
-*/
 
                 Log.d("ParserPageZFFM", "10 " + popSongs.getTrackArtist());
                 objectTrackList.add(popSongs);
